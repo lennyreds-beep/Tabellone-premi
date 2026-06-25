@@ -21,146 +21,204 @@
     --text2: #6b6b8a;
     --radius: 14px;
     --radius-sm: 8px;
+    --red: #e74c3c;
+    --red-light: #fdecea;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-  .header { background: var(--purple); color: white; padding: 16px 16px 12px; text-align: center; position: sticky; top: 0; z-index: 100; }
-  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
-  .header p { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+  .header { background: var(--purple); color: white; padding: 16px 16px 10px; text-align: center; position: sticky; top: 0; z-index: 100; }
+  .header h1 { font-size: 20px; font-weight: 700; }
+  .sync-row { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 3px; }
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; flex-shrink: 0; }
+  .sync-dot.off { background: #f87171; }
+  .sync-dot.wait { background: #fbbf24; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  #sync-label { font-size: 11px; opacity: 0.85; }
 
-  .tabs { display: flex; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 62px; z-index: 99; }
-  .tab { flex: 1; padding: 12px 4px; font-size: 12px; font-weight: 600; text-align: center; cursor: pointer; color: var(--text2); border: none; background: transparent; transition: all 0.15s; }
+  .tabs { display: flex; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 60px; z-index: 99; }
+  .tab { flex: 1; padding: 11px 4px; font-size: 11px; font-weight: 600; text-align: center; cursor: pointer; color: var(--text2); border: none; background: transparent; }
   .tab.active { color: var(--purple); border-bottom: 2.5px solid var(--purple); }
-  .tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+  .tab-icon { font-size: 17px; display: block; margin-bottom: 2px; }
 
-  .section { display: none; padding: 16px 12px 80px; }
+  .section { display: none; padding: 14px 12px 90px; }
   .section.active { display: block; }
 
-  .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
-  .pcard { background: var(--card); border-radius: var(--radius); padding: 14px; border: 1px solid var(--border); }
+  /* PLAYER CARDS */
+  .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .pcard { background: var(--card); border-radius: var(--radius); padding: 13px; border: 1px solid var(--border); }
   .pheader { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-  .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
   .av0 { background: var(--purple-light); color: var(--purple-dark); }
   .av1 { background: var(--teal-light); color: var(--teal-dark); }
-  .pname { font-size: 14px; font-weight: 700; color: var(--text); }
+  .pname { font-size: 14px; font-weight: 700; }
   .ppts { font-size: 11px; color: var(--text2); }
-  .pbar { height: 8px; background: #ececec; border-radius: 999px; overflow: hidden; margin: 6px 0; }
-  .pfill { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
-  .f0 { background: var(--purple); }
-  .f1 { background: var(--teal); }
+  .pbar { height: 7px; background: #ececec; border-radius: 999px; overflow: hidden; margin: 6px 0; }
+  .pfill { height: 100%; border-radius: 999px; transition: width 0.4s; }
+  .f0 { background: var(--purple); } .f1 { background: var(--teal); }
   .pnext { font-size: 10px; color: var(--text2); line-height: 1.4; }
 
-  .section-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; }
+  /* PUNTI MANUALI */
+  .manual-pts-section { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 14px; margin-bottom: 16px; }
+  .manual-title { font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; }
+  .manual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .manual-player { display: flex; flex-direction: column; gap: 6px; }
+  .manual-name { font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 5px; }
+  .color-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .cd0 { background: var(--purple); } .cd1 { background: var(--teal); }
+  .manual-input-row { display: flex; gap: 5px; }
+  .manual-input-row input { flex: 1; height: 36px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 8px; font-size: 13px; font-weight: 600; background: var(--bg); color: var(--text); text-align: center; outline: none; width: 0; }
+  .manual-input-row input:focus { border-color: var(--purple); }
+  .mbtn { height: 36px; width: 36px; border: none; border-radius: var(--radius-sm); font-size: 16px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
+  .mbtn:active { transform: scale(0.93); }
+  .mbtn-add { background: var(--purple-light); color: var(--purple-dark); }
+  .mbtn-add.p1 { background: var(--teal-light); color: var(--teal-dark); }
+  .mbtn-sub { background: var(--red-light); color: var(--red); }
+  .reset-player-btn { width: 100%; padding: 7px 0; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; cursor: pointer; background: var(--bg); color: var(--text2); }
+  .reset-player-btn:active { background: #ffe5e5; color: var(--red); }
 
-  .tlist { display: flex; flex-direction: column; gap: 8px; }
-  .tcard { background: var(--card); border-radius: var(--radius-sm); padding: 12px; border: 1px solid var(--border); }
-  .tinfo { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .tico { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
-  .tname { font-size: 14px; color: var(--text); flex: 1; font-weight: 500; }
-  .tbadge { font-size: 11px; font-weight: 700; background: var(--purple-light); color: var(--purple-dark); padding: 3px 8px; border-radius: 999px; }
-  .arow { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .abtn { padding: 9px 0; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; background: var(--bg); color: var(--text2); transition: all 0.12s; }
+  /* TASK LIST */
+  .slabel { font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; }
+  .tlist { display: flex; flex-direction: column; gap: 7px; }
+  .tcard { background: var(--card); border-radius: var(--radius-sm); padding: 11px 12px; border: 1px solid var(--border); }
+  .tinfo { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; }
+  .tico { font-size: 19px; width: 26px; text-align: center; flex-shrink: 0; }
+  .tname { font-size: 13px; color: var(--text); flex: 1; font-weight: 500; }
+  .tbadge { font-size: 11px; font-weight: 700; background: var(--purple-light); color: var(--purple-dark); padding: 2px 7px; border-radius: 999px; }
+  .arow { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .abtn { padding: 8px 0; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; background: var(--bg); color: var(--text2); }
   .abtn:active { transform: scale(0.96); }
   .abtn.a0 { border-color: var(--purple); color: var(--purple-dark); background: var(--purple-light); }
   .abtn.a1 { border-color: var(--teal); color: var(--teal-dark); background: var(--teal-light); }
 
-  .prow { background: var(--card); border-radius: var(--radius-sm); padding: 12px 14px; border: 1px solid var(--border); display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .pico { font-size: 22px; width: 32px; text-align: center; flex-shrink: 0; }
+  /* PREMI */
+  .prow { background: var(--card); border-radius: var(--radius-sm); padding: 11px 13px; border: 1px solid var(--border); display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+  .pico { font-size: 21px; width: 30px; text-align: center; flex-shrink: 0; }
   .pinfo { flex: 1; }
-  .prname { font-size: 14px; font-weight: 600; color: var(--text); }
-  .prth { font-size: 12px; color: var(--text2); margin-top: 2px; }
-  .prstars { font-size: 14px; color: var(--purple); }
+  .prname { font-size: 13px; font-weight: 600; }
+  .prth { font-size: 11px; color: var(--text2); margin-top: 1px; }
+  .prstars { font-size: 13px; color: var(--purple); }
   .unlocked-badge { font-size: 10px; font-weight: 700; background: #d4edda; color: #155724; padding: 2px 6px; border-radius: 999px; margin-top: 3px; display: inline-block; }
 
-  .addbox { background: var(--card); border-radius: var(--radius); padding: 14px; border: 1px solid var(--border); margin-top: 12px; }
-  .addtitle { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-  .field-row { display: flex; gap: 6px; flex-wrap: wrap; }
-  .field-row input { height: 40px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 13px; background: var(--bg); color: var(--text); outline: none; }
+  /* PERSONALIZZA */
+  .addbox { background: var(--card); border-radius: var(--radius); padding: 13px; border: 1px solid var(--border); margin-top: 10px; }
+  .addtitle { font-size: 13px; font-weight: 700; margin-bottom: 9px; }
+  .field-row { display: flex; gap: 5px; flex-wrap: wrap; }
+  .field-row input { height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 9px; font-size: 13px; background: var(--bg); color: var(--text); outline: none; }
   .field-row input:focus { border-color: var(--purple); }
-  .f-icon { width: 56px; flex-shrink: 0; text-align: center; }
-  .f-name { flex: 1; min-width: 100px; }
-  .f-pts { width: 64px; flex-shrink: 0; }
-  .addbtn { height: 40px; padding: 0 14px; border: none; border-radius: var(--radius-sm); background: var(--purple); color: white; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-  .addbtn:active { opacity: 0.85; transform: scale(0.97); }
-  .delbtn { border: 1px solid #f0c0c0; border-radius: var(--radius-sm); padding: 5px 10px; font-size: 12px; cursor: pointer; background: #fff0f0; color: #c0392b; }
-  .delbtn:active { opacity: 0.8; }
-  .edit-tcard { background: var(--card); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-  .edit-tcard .tname { flex: 1; font-size: 13px; }
+  .f-icon { width: 54px; flex-shrink: 0; text-align: center; }
+  .f-name { flex: 1; min-width: 90px; }
+  .f-pts { width: 62px; flex-shrink: 0; }
+  .addbtn { height: 38px; padding: 0 13px; border: none; border-radius: var(--radius-sm); background: var(--purple); color: white; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .addbtn:active { opacity: 0.85; }
+  .delbtn { border: 1px solid #f0c0c0; border-radius: var(--radius-sm); padding: 4px 9px; font-size: 12px; cursor: pointer; background: #fff0f0; color: var(--red); }
+  .edit-tcard { background: var(--card); border-radius: var(--radius-sm); padding: 9px 11px; border: 1px solid var(--border); display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
+  .edit-tcard .tname { flex: 1; font-size: 12px; }
 
-  .log { margin-top: 18px; }
-  .llist { display: flex; flex-direction: column; gap: 5px; max-height: 140px; overflow-y: auto; }
-  .litem { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 7px; }
-  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .d0 { background: var(--purple); }
-  .d1 { background: var(--teal); }
+  /* LOG */
+  .log { margin-top: 16px; }
+  .llist { display: flex; flex-direction: column; gap: 4px; max-height: 130px; overflow-y: auto; }
+  .litem { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .d0 { background: var(--purple); } .d1 { background: var(--teal); }
+  .litem.neg { opacity: 0.7; }
 
-  .rst-row { display: flex; justify-content: flex-end; margin-bottom: 10px; }
-  .rstbtn { font-size: 12px; color: var(--text2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 12px; background: var(--card); cursor: pointer; }
-
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #2d2d4e; color: #fff; padding: 10px 20px; border-radius: var(--radius); font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; max-width: 90vw; text-align: center; }
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); background: #2d2d4e; color: #fff; padding: 10px 18px; border-radius: var(--radius); font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; max-width: 90vw; text-align: center; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  .empty { text-align: center; color: var(--text2); font-size: 13px; padding: 20px 0; }
+  .loading { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 14px; }
+  .empty { text-align: center; color: var(--text2); font-size: 13px; padding: 16px 0; }
+  .divider { height: 1px; background: var(--border); margin: 14px 0; }
 </style>
 </head>
 <body>
 
 <div class="header">
   <h1>⭐ Tabellone Premi</h1>
-  <p>Emanuele &amp; Stefano</p>
+  <div class="sync-row">
+    <span class="sync-dot wait" id="sync-dot"></span>
+    <span id="sync-label">Connessione...</span>
+  </div>
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="showTab('gioca',this)">
-    <span class="tab-icon">🏠</span>Tabellone
-  </button>
-  <button class="tab" onclick="showTab('premi',this)">
-    <span class="tab-icon">🎁</span>Premi
-  </button>
-  <button class="tab" onclick="showTab('gestisci',this)">
-    <span class="tab-icon">⚙️</span>Personalizza
-  </button>
+  <button class="tab active" onclick="showTab('gioca',this)"><span class="tab-icon">🏠</span>Tabellone</button>
+  <button class="tab" onclick="showTab('premi',this)"><span class="tab-icon">🎁</span>Premi</button>
+  <button class="tab" onclick="showTab('gestisci',this)"><span class="tab-icon">⚙️</span>Personalizza</button>
 </div>
 
+<!-- TABELLONE -->
 <div id="sec-gioca" class="section active">
-  <div class="player-grid" id="player-grid"></div>
-  <p class="section-label">Assegna punti</p>
-  <div class="tlist" id="task-list-main"></div>
-  <div class="log">
-    <p class="section-label">Ultime azioni</p>
-    <div class="llist" id="log-list"></div>
+  <div id="loading-main" class="loading">⏳ Caricamento...</div>
+  <div id="main-content" style="display:none">
+    <div class="player-grid" id="player-grid"></div>
+
+    <!-- GESTIONE MANUALE PUNTI -->
+    <div class="manual-pts-section">
+      <div class="manual-title">➕➖ Aggiungi o togli punti manualmente</div>
+      <div class="manual-grid">
+        <!-- Emanuele -->
+        <div class="manual-player">
+          <div class="manual-name"><span class="color-dot cd0"></span>Emanuele</div>
+          <div class="manual-input-row">
+            <input type="number" id="manual-pts-0" value="10" min="1" max="999">
+          </div>
+          <div class="manual-input-row">
+            <button class="mbtn mbtn-add" onclick="window._manualPts(0, 1)" title="Aggiungi">+</button>
+            <button class="mbtn mbtn-sub" onclick="window._manualPts(0, -1)" title="Togli">−</button>
+          </div>
+          <button class="reset-player-btn" onclick="window._resetPlayer(0)">🔄 Azzera Emanuele</button>
+        </div>
+        <!-- Stefano -->
+        <div class="manual-player">
+          <div class="manual-name"><span class="color-dot cd1"></span>Stefano</div>
+          <div class="manual-input-row">
+            <input type="number" id="manual-pts-1" value="10" min="1" max="999">
+          </div>
+          <div class="manual-input-row">
+            <button class="mbtn mbtn-add p1" onclick="window._manualPts(1, 1)" title="Aggiungi">+</button>
+            <button class="mbtn mbtn-sub" onclick="window._manualPts(1, -1)" title="Togli">−</button>
+          </div>
+          <button class="reset-player-btn" onclick="window._resetPlayer(1)">🔄 Azzera Stefano</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="slabel">Assegna punti per attività</p>
+    <div class="tlist" id="task-list-main"></div>
+    <div class="log">
+      <p class="slabel">Ultime azioni</p>
+      <div class="llist" id="log-list"></div>
+    </div>
   </div>
 </div>
 
+<!-- PREMI -->
 <div id="sec-premi" class="section">
-  <div class="rst-row">
-    <button class="rstbtn" onclick="resetAll()">🔄 Azzera punti</button>
-  </div>
   <div id="prizes-list"></div>
 </div>
 
+<!-- PERSONALIZZA -->
 <div id="sec-gestisci" class="section">
-  <p class="section-label">Attività</p>
+  <p class="slabel">Attività</p>
   <div id="task-list-edit"></div>
   <div class="addbox">
     <p class="addtitle">➕ Aggiungi attività</p>
     <div class="field-row">
       <input class="f-icon" id="nt-icon" placeholder="🌟" maxlength="2">
       <input class="f-name" id="nt-name" placeholder="Nome attività">
-      <input class="f-pts" id="nt-pts" type="number" min="1" max="999" value="5" placeholder="Pt">
+      <input class="f-pts" id="nt-pts" type="number" min="1" max="999" value="5">
       <button class="addbtn" onclick="addTask()">Aggiungi</button>
     </div>
   </div>
-
-  <p class="section-label" style="margin-top:20px">Premi</p>
+  <div class="divider"></div>
+  <p class="slabel">Premi</p>
   <div id="prizes-edit"></div>
   <div class="addbox">
     <p class="addtitle">➕ Aggiungi premio</p>
     <div class="field-row">
       <input class="f-icon" id="np-icon" placeholder="🎁" maxlength="2">
       <input class="f-name" id="np-name" placeholder="Nome premio">
-      <input class="f-pts" id="np-pts" type="number" min="1" max="9999" value="50" placeholder="Pt">
+      <input class="f-pts" id="np-pts" type="number" min="1" max="9999" value="50">
       <button class="addbtn" onclick="addPrize()">Aggiungi</button>
     </div>
   </div>
@@ -168,7 +226,24 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDXmjHI48bb9rFkadacAoZJRzDVVxIk4II",
+  authDomain: "tabellone-premi.firebaseapp.com",
+  databaseURL: "https://tabellone-premi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "tabellone-premi",
+  storageBucket: "tabellone-premi.firebasestorage.app",
+  messagingSenderId: "47007476455",
+  appId: "1:47007476455:web:39aba82dabf3ceac779042"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const dbRef = ref(db, 'tabellone');
+
 const PLAYERS = [
   { name: 'Emanuele', av: 'av0', f: 'f0', dot: 'd0', ab: 'a0' },
   { name: 'Stefano',  av: 'av1', f: 'f1', dot: 'd1', ab: 'a1' }
@@ -198,23 +273,39 @@ const DEFAULT_PRIZES = [
   {icon:'🎉', name:'Uscita speciale', pts:120},
 ];
 
-function load() {
-  return {
-    tasks:  JSON.parse(localStorage.getItem('tp_tasks')  || 'null') || DEFAULT_TASKS,
-    prizes: JSON.parse(localStorage.getItem('tp_prizes') || 'null') || DEFAULT_PRIZES,
-    points: JSON.parse(localStorage.getItem('tp_points') || '[0,0]'),
-    logs:   JSON.parse(localStorage.getItem('tp_logs')   || '[]'),
-  };
+let state = { tasks: DEFAULT_TASKS, prizes: DEFAULT_PRIZES, points: [0,0], logs: [] };
+
+function setSyncStatus(s) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  if (s==='ok')   { dot.className='sync-dot';      lbl.textContent='Sincronizzato ✓'; }
+  if (s==='off')  { dot.className='sync-dot off';  lbl.textContent='Offline'; }
+  if (s==='wait') { dot.className='sync-dot wait'; lbl.textContent='Salvataggio...'; }
 }
 
-function save() {
-  localStorage.setItem('tp_tasks',  JSON.stringify(state.tasks));
-  localStorage.setItem('tp_prizes', JSON.stringify(state.prizes));
-  localStorage.setItem('tp_points', JSON.stringify(state.points));
-  localStorage.setItem('tp_logs',   JSON.stringify(state.logs));
+async function save() {
+  setSyncStatus('wait');
+  try { await set(dbRef, state); setSyncStatus('ok'); }
+  catch(e) { setSyncStatus('off'); showToast('⚠️ Errore salvataggio!'); }
 }
 
-let state = load();
+onValue(dbRef, (snap) => {
+  document.getElementById('loading-main').style.display = 'none';
+  document.getElementById('main-content').style.display = 'block';
+  setSyncStatus('ok');
+  if (snap.exists()) {
+    const d = snap.val();
+    state.tasks  = d.tasks  || DEFAULT_TASKS;
+    state.prizes = d.prizes || DEFAULT_PRIZES;
+    state.points = d.points || [0,0];
+    state.logs   = d.logs   || [];
+  } else { save(); }
+  renderAll();
+}, () => {
+  setSyncStatus('off');
+  document.getElementById('loading-main').style.display = 'none';
+  document.getElementById('main-content').style.display = 'block';
+});
 
 function inits(n) { return n.split(' ').map(w=>w[0]).join('').toUpperCase(); }
 
@@ -222,7 +313,7 @@ function renderPlayers() {
   const sorted = state.prizes.slice().sort((a,b)=>a.pts-b.pts);
   const maxPt = sorted.length ? sorted[sorted.length-1].pts : 100;
   document.getElementById('player-grid').innerHTML = PLAYERS.map((p,i) => {
-    const pct = Math.min(100, Math.round((state.points[i] / maxPt) * 100));
+    const pct = Math.min(100, Math.round((state.points[i]/maxPt)*100));
     const next = sorted.find(pr => pr.pts > state.points[i]);
     const unlocked = state.prizes.filter(pr => pr.pts <= state.points[i]).length;
     return `<div class="pcard">
@@ -231,7 +322,7 @@ function renderPlayers() {
         <div><div class="pname">${p.name}</div><div class="ppts">${state.points[i]} pt · ${unlocked} premi</div></div>
       </div>
       <div class="pbar"><div class="pfill ${p.f}" style="width:${pct}%"></div></div>
-      <div class="pnext">${next ? `→ ${next.icon} ${next.name} (${next.pts} pt)` : '🏆 Tutti i premi!'}</div>
+      <div class="pnext">${next?`→ ${next.icon} ${next.name} (${next.pts} pt)`:'🏆 Tutti i premi!'}</div>
     </div>`;
   }).join('');
 }
@@ -239,13 +330,9 @@ function renderPlayers() {
 function renderTasksMain() {
   document.getElementById('task-list-main').innerHTML = state.tasks.map((t,ti) => `
     <div class="tcard">
-      <div class="tinfo">
-        <span class="tico">${t.icon}</span>
-        <span class="tname">${t.name}</span>
-        <span class="tbadge">+${t.pts} pt</span>
-      </div>
+      <div class="tinfo"><span class="tico">${t.icon}</span><span class="tname">${t.name}</span><span class="tbadge">+${t.pts} pt</span></div>
       <div class="arow">
-        ${PLAYERS.map((p,pi) => `<button class="abtn ${p.ab}" onclick="addPts(${pi},${ti})">${p.name} +${t.pts}</button>`).join('')}
+        ${PLAYERS.map((p,pi)=>`<button class="abtn ${p.ab}" onclick="window._addPts(${pi},${ti})">${p.name} +${t.pts}</button>`).join('')}
       </div>
     </div>`).join('');
 }
@@ -253,126 +340,141 @@ function renderTasksMain() {
 function renderPrizes() {
   const sorted = state.prizes.slice().sort((a,b)=>a.pts-b.pts);
   document.getElementById('prizes-list').innerHTML = sorted.length ? sorted.map(pr => {
-    const stars = '★'.repeat(Math.min(5, Math.ceil(pr.pts/24)));
-    const u0 = state.points[0] >= pr.pts, u1 = state.points[1] >= pr.pts;
-    let badge = '';
-    if (u0 && u1) badge = '<span class="unlocked-badge">✅ Entrambi</span>';
-    else if (u0) badge = `<span class="unlocked-badge">✅ ${PLAYERS[0].name}</span>`;
-    else if (u1) badge = `<span class="unlocked-badge">✅ ${PLAYERS[1].name}</span>`;
+    const stars = '★'.repeat(Math.min(5,Math.ceil(pr.pts/24)));
+    const u0=state.points[0]>=pr.pts, u1=state.points[1]>=pr.pts;
+    let badge='';
+    if(u0&&u1) badge='<span class="unlocked-badge">✅ Entrambi</span>';
+    else if(u0) badge=`<span class="unlocked-badge">✅ ${PLAYERS[0].name}</span>`;
+    else if(u1) badge=`<span class="unlocked-badge">✅ ${PLAYERS[1].name}</span>`;
     return `<div class="prow">
       <span class="pico">${pr.icon}</span>
-      <div class="pinfo"><div class="prname">${pr.name}</div><div class="prth">${pr.pts} punti necessari</div>${badge}</div>
+      <div class="pinfo"><div class="prname">${pr.name}</div><div class="prth">${pr.pts} punti</div>${badge}</div>
       <div class="prstars">${stars}</div>
     </div>`;
-  }).join('') : '<p class="empty">Nessun premio. Aggiungine uno!</p>';
+  }).join('') : '<p class="empty">Nessun premio aggiunto.</p>';
 }
 
 function renderTasksEdit() {
-  document.getElementById('task-list-edit').innerHTML = state.tasks.map((t,ti) => `
+  document.getElementById('task-list-edit').innerHTML = state.tasks.map((t,ti)=>`
     <div class="edit-tcard">
       <span class="tico">${t.icon}</span>
       <span class="tname">${t.name} — <strong>+${t.pts} pt</strong></span>
-      <button class="delbtn" onclick="delTask(${ti})">🗑</button>
+      <button class="delbtn" onclick="window._delTask(${ti})">🗑</button>
     </div>`).join('') || '<p class="empty">Nessuna attività.</p>';
 }
 
 function renderPrizesEdit() {
   const sorted = state.prizes.slice().sort((a,b)=>a.pts-b.pts);
-  document.getElementById('prizes-edit').innerHTML = sorted.length ? sorted.map(pr => {
-    const i = state.prizes.indexOf(pr);
+  document.getElementById('prizes-edit').innerHTML = sorted.length ? sorted.map(pr=>{
+    const i=state.prizes.indexOf(pr);
     return `<div class="edit-tcard">
       <span class="tico">${pr.icon}</span>
       <span class="tname">${pr.name} — <strong>${pr.pts} pt</strong></span>
-      <button class="delbtn" onclick="delPrize(${i})">🗑</button>
+      <button class="delbtn" onclick="window._delPrize(${i})">🗑</button>
     </div>`;
   }).join('') : '<p class="empty">Nessun premio.</p>';
 }
 
 function renderLog() {
   document.getElementById('log-list').innerHTML = state.logs.length
-    ? state.logs.slice().reverse().slice(0,20).map(l => `
-        <div class="litem">
+    ? state.logs.slice().reverse().slice(0,25).map(l=>`
+        <div class="litem${l.neg?' neg':''}">
           <span class="dot ${PLAYERS[l.p].dot}"></span>
-          <span>${PLAYERS[l.p].name} — ${state.tasks[l.t] ? state.tasks[l.t].icon+' '+state.tasks[l.t].name : '(rimossa)'} +${l.pts} pt</span>
+          <span>${PLAYERS[l.p].name} — ${l.icon||''} ${l.tname} ${l.neg?'':'+'}${l.pts} pt</span>
         </div>`).join('')
-    : '<p class="empty" style="padding:8px 0">Nessuna azione ancora.</p>';
+    : '<p class="empty" style="padding:6px 0">Nessuna azione ancora.</p>';
 }
 
-function addPts(pi, ti) {
+function renderAll() { renderPlayers(); renderTasksMain(); renderLog(); }
+
+/* ---- AZIONI ---- */
+window._addPts = async function(pi, ti) {
+  const t = state.tasks[ti];
   const prev = state.points[pi];
-  state.points[pi] += state.tasks[ti].pts;
-  state.logs.push({ p: pi, t: ti, pts: state.tasks[ti].pts });
-  if (state.logs.length > 100) state.logs = state.logs.slice(-100);
-  const sorted = state.prizes.slice().sort((a,b)=>a.pts-b.pts);
-  const newPrize = sorted.find(pr => pr.pts > prev && pr.pts <= state.points[pi]);
-  save(); renderPlayers(); renderPrizes(); renderLog();
-  if (newPrize) showToast(`🎉 ${PLAYERS[pi].name} ha sbloccato: ${newPrize.icon} ${newPrize.name}!`);
-  else showToast(`+${state.tasks[ti].pts} pt a ${PLAYERS[pi].name}! (Tot: ${state.points[pi]})`);
-}
+  state.points[pi] += t.pts;
+  state.logs.push({ p:pi, tname:t.name, icon:t.icon, pts:t.pts });
+  if(state.logs.length>100) state.logs=state.logs.slice(-100);
+  const sorted=state.prizes.slice().sort((a,b)=>a.pts-b.pts);
+  const newPrize=sorted.find(pr=>pr.pts>prev&&pr.pts<=state.points[pi]);
+  renderAll(); await save();
+  if(newPrize) showToast(`🎉 ${PLAYERS[pi].name} ha sbloccato: ${newPrize.icon} ${newPrize.name}!`);
+  else showToast(`+${t.pts} pt a ${PLAYERS[pi].name}! (Tot: ${state.points[pi]})`);
+};
 
-function addTask() {
-  const icon = document.getElementById('nt-icon').value.trim() || '⭐';
-  const name = document.getElementById('nt-name').value.trim();
-  const pts  = parseInt(document.getElementById('nt-pts').value) || 5;
-  if (!name) { showToast('Inserisci il nome dell\'attività!'); return; }
-  state.tasks.push({ icon, name, pts });
-  document.getElementById('nt-name').value = '';
-  document.getElementById('nt-icon').value = '';
-  save(); renderTasksMain(); renderTasksEdit();
-  showToast(`Attività "${name}" aggiunta!`);
-}
+window._manualPts = async function(pi, sign) {
+  const val = parseInt(document.getElementById(`manual-pts-${pi}`).value) || 0;
+  if(val <= 0) { showToast('Inserisci un numero valido!'); return; }
+  const delta = sign * val;
+  const newVal = Math.max(0, state.points[pi] + delta);
+  const actual = newVal - state.points[pi];
+  state.points[pi] = newVal;
+  const label = sign > 0 ? `+${actual} pt (manuale)` : `−${val} pt (premio riscattato)`;
+  state.logs.push({ p:pi, tname: sign>0?'aggiunta manuale':'premio riscattato', icon: sign>0?'➕':'🎁', pts: label, neg: sign<0 });
+  if(state.logs.length>100) state.logs=state.logs.slice(-100);
+  renderAll(); await save();
+  if(sign > 0) showToast(`+${actual} pt aggiunti a ${PLAYERS[pi].name}!`);
+  else showToast(`−${val} pt tolti a ${PLAYERS[pi].name}. Rimanenti: ${state.points[pi]}`);
+};
 
-function delTask(i) {
-  const n = state.tasks[i].name;
-  state.tasks.splice(i, 1);
-  save(); renderTasksMain(); renderTasksEdit();
-  showToast(`"${n}" eliminata`);
-}
-
-function addPrize() {
-  const icon = document.getElementById('np-icon').value.trim() || '🎁';
-  const name = document.getElementById('np-name').value.trim();
-  const pts  = parseInt(document.getElementById('np-pts').value) || 50;
-  if (!name) { showToast('Inserisci il nome del premio!'); return; }
-  state.prizes.push({ icon, name, pts });
-  document.getElementById('np-name').value = '';
-  document.getElementById('np-icon').value = '';
-  save(); renderPrizes(); renderPrizesEdit(); renderPlayers();
-  showToast(`Premio "${name}" aggiunto!`);
-}
-
-function delPrize(i) {
-  const n = state.prizes[i].name;
-  state.prizes.splice(i, 1);
-  save(); renderPrizes(); renderPrizesEdit(); renderPlayers();
-  showToast(`"${n}" eliminato`);
-}
-
-function resetAll() {
-  if (confirm('Azzerare i punti di Emanuele e Stefano?')) {
-    state.points = [0, 0]; state.logs = [];
-    save(); renderPlayers(); renderPrizes(); renderLog();
-    showToast('Punti azzerati! Nuovo giro 🚀');
+window._resetPlayer = async function(pi) {
+  if(confirm(`Azzerare tutti i punti di ${PLAYERS[pi].name}?`)) {
+    state.points[pi] = 0;
+    state.logs.push({ p:pi, tname:'azzeramento', icon:'🔄', pts:'0', neg:true });
+    renderAll(); await save();
+    showToast(`Punti di ${PLAYERS[pi].name} azzerati!`);
   }
-}
+};
+
+window._delTask = async function(i) {
+  const n=state.tasks[i].name; state.tasks.splice(i,1);
+  renderTasksMain(); renderTasksEdit(); await save();
+  showToast(`"${n}" eliminata`);
+};
+
+window._delPrize = async function(i) {
+  const n=state.prizes[i].name; state.prizes.splice(i,1);
+  renderPrizes(); renderPrizesEdit(); renderPlayers(); await save();
+  showToast(`"${n}" eliminato`);
+};
+
+window.addTask = async function() {
+  const icon=document.getElementById('nt-icon').value.trim()||'⭐';
+  const name=document.getElementById('nt-name').value.trim();
+  const pts=parseInt(document.getElementById('nt-pts').value)||5;
+  if(!name){showToast('Inserisci il nome!');return;}
+  state.tasks.push({icon,name,pts});
+  document.getElementById('nt-name').value='';
+  document.getElementById('nt-icon').value='';
+  renderTasksMain(); renderTasksEdit(); await save();
+  showToast(`"${name}" aggiunta!`);
+};
+
+window.addPrize = async function() {
+  const icon=document.getElementById('np-icon').value.trim()||'🎁';
+  const name=document.getElementById('np-name').value.trim();
+  const pts=parseInt(document.getElementById('np-pts').value)||50;
+  if(!name){showToast('Inserisci il nome!');return;}
+  state.prizes.push({icon,name,pts});
+  document.getElementById('np-name').value='';
+  document.getElementById('np-icon').value='';
+  renderPrizes(); renderPrizesEdit(); renderPlayers(); await save();
+  showToast(`"${name}" aggiunto!`);
+};
+
+window.showTab = function(name, btn) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('sec-'+name).classList.add('active');
+  if(name==='gestisci'){renderTasksEdit();renderPrizesEdit();}
+  if(name==='premi'){renderPrizes();}
+};
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._tid);
-  t._tid = setTimeout(() => t.classList.remove('show'), 2600);
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._tid); t._tid=setTimeout(()=>t.classList.remove('show'),2700);
 }
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('sec-' + name).classList.add('active');
-  if (name === 'gestisci') { renderTasksEdit(); renderPrizesEdit(); }
-  if (name === 'premi') { renderPrizes(); }
-}
-
-renderPlayers(); renderTasksMain(); renderLog();
 </script>
 </body>
 </html>
