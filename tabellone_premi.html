@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Tabellone Premi</title>
+<style>
+  :root {
+    --purple: #7F77DD;
+    --purple-light: #EEEDFE;
+    --purple-dark: #3C3489;
+    --teal: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-dark: #085041;
+    --bg: #f8f7fc;
+    --card: #ffffff;
+    --border: rgba(0,0,0,0.10);
+    --text: #1a1a2e;
+    --text2: #6b6b8a;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  .header { background: var(--purple); color: white; padding: 16px 16px 12px; text-align: center; position: sticky; top: 0; z-index: 100; }
+  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+  .header p { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+
+  .tabs { display: flex; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 62px; z-index: 99; }
+  .tab { flex: 1; padding: 12px 4px; font-size: 12px; font-weight: 600; text-align: center; cursor: pointer; color: var(--text2); border: none; background: transparent; transition: all 0.15s; }
+  .tab.active { color: var(--purple); border-bottom: 2.5px solid var(--purple); }
+  .tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+  .section { display: none; padding: 16px 12px 80px; }
+  .section.active { display: block; }
+
+  .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .pcard { background: var(--card); border-radius: var(--radius); padding: 14px; border: 1px solid var(--border); }
+  .pheader { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .av0 { background: var(--purple-light); color: var(--purple-dark); }
+  .av1 { background: var(--teal-light); color: var(--teal-dark); }
+  .pname { font-size: 14px; font-weight: 700; color: var(--text); }
+  .ppts { font-size: 11px; color: var(--text2); }
+  .pbar { height: 8px; background: #ececec; border-radius: 999px; overflow: hidden; margin: 6px 0; }
+  .pfill { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+  .f0 { background: var(--purple); }
+  .f1 { background: var(--teal); }
+  .pnext { font-size: 10px; color: var(--text2); line-height: 1.4; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; }
+
+  .tlist { display: flex; flex-direction: column; gap: 8px; }
+  .tcard { background: var(--card); border-radius: var(--radius-sm); padding: 12px; border: 1px solid var(--border); }
+  .tinfo { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .tico { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
+  .tname { font-size: 14px; color: var(--text); flex: 1; font-weight: 500; }
+  .tbadge { font-size: 11px; font-weight: 700; background: var(--purple-light); color: var(--purple-dark); padding: 3px 8px; border-radius: 999px; }
+  .arow { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .abtn { padding: 9px 0; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; background: var(--bg); color: var(--text2); transition: all 0.12s; }
+  .abtn:active { transform: scale(0.96); }
+  .abtn.a0 { border-color: var(--purple); color: var(--purple-dark); background: var(--purple-light); }
+  .abtn.a1 { border-color: var(--teal); color: var(--teal-dark); background: var(--teal-light); }
+
+  .prow { background: var(--card); border-radius: var(--radius-sm); padding: 12px 14px; border: 1px solid var(--border); display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .pico { font-size: 22px; width: 32px; text-align: center; flex-shrink: 0; }
+  .pinfo { flex: 1; }
+  .prname { font-size: 14px; font-weight: 600; color: var(--text); }
+  .prth { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .prstars { font-size: 14px; color: var(--purple); }
+  .unlocked-badge { font-size: 10px; font-weight: 700; background: #d4edda; color: #155724; padding: 2px 6px; border-radius: 999px; margin-top: 3px; display: inline-block; }
+
+  .addbox { background: var(--card); border-radius: var(--radius); padding: 14px; border: 1px solid var(--border); margin-top: 12px; }
+  .addtitle { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+  .field-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .field-row input { height: 40px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 13px; background: var(--bg); color: var(--text); outline: none; }
+  .field-row input:focus { border-color: var(--purple); }
+  .f-icon { width: 56px; flex-shrink: 0; text-align: center; }
+  .f-name { flex: 1; min-width: 100px; }
+  .f-pts { width: 64px; flex-shrink: 0; }
+  .addbtn { height: 40px; padding: 0 14px; border: none; border-radius: var(--radius-sm); background: var(--purple); color: white; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .addbtn:active { opacity: 0.85; transform: scale(0.97); }
+  .delbtn { border: 1px solid #f0c0c0; border-radius: var(--radius-sm); padding: 5px 10px; font-size: 12px; cursor: pointer; background: #fff0f0; color: #c0392b; }
+  .delbtn:active { opacity: 0.8; }
+  .edit-tcard { background: var(--card); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .edit-tcard .tname { flex: 1; font-size: 13px; }
+
+  .log { margin-top: 18px; }
+  .llist { display: flex; flex-direction: column; gap: 5px; max-height: 140px; overflow-y: auto; }
+  .litem { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 7px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .d0 { background: var(--purple); }
+  .d1 { background: var(--teal); }
+
+  .rst-row { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+  .rstbtn { font-size: 12px; color: var(--text2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 12px; background: var(--card); cursor: pointer; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #2d2d4e; color: #fff; padding: 10px 20px; border-radius: var(--radius); font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; max-width: 90vw; text-align: center; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .empty { text-align: center; color: var(--text2); font-size: 13px; padding: 20px 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⭐ Tabellone Premi</h1>
+  <p>Emanuele &amp; Stefano</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('gioca',this)">
+    <span class="tab-icon">🏠</span>Tabellone
+  </button>
+  <button class="tab" onclick="showTab('premi',this)">
+    <span class="tab-icon">🎁</span>Premi
+  </button>
+  <button class="tab" onclick="showTab('gestisci',this)">
+    <span class="tab-icon">⚙️</span>Personalizza
+  </button>
+</div>
+
+<div id="sec-gioca" class="section active">
+  <div class="player-grid" id="player-grid"></div>
+  <p class="section-label">Assegna punti</p>
+  <div class="tlist" id="task-list-main"></div>
+  <div class="log">
+    <p class="section-label">Ultime azioni</p>
+    <div class="llist" id="log-list"></div>
+  </div>
+</div>
+
+<div id="sec-premi" class="section">
+  <div class="rst-row">
+    <button class="rstbtn" onclick="resetAll()">🔄 Azzera punti</button>
+  </div>
+  <div id="prizes-list"></div>
+</div>
+
+<div id="sec-gestisci" class="section">
+  <p class="section-label">Attività</p>
+  <div id="task-list-edit"></div>
+  <div class="addbox">
+    <p class="addtitle">➕ Aggiungi attività</p>
+    <div class="field-row">
+      <input class="f-icon" id="nt-icon" placeholder="🌟" maxlength="2">
+      <input class="f-name" id="nt-name" placeholder="Nome attività">
+      <input class="f-pts" id="nt-pts" type="number" min="1" max="999" value="5" placeholder="Pt">
+      <button class="addbtn" onclick="addTask()">Aggiungi</button>
+    </div>
+  </div>
+
+  <p class="section-label" style="margin-top:20px">Premi</p>
+  <div id="prizes-edit"></div>
+  <div class="addbox">
+    <p class="addtitle">➕ Aggiungi premio</p>
+    <div class="field-row">
+      <input class="f-icon" id="np-icon" placeholder="🎁" maxlength="2">
+      <input class="f-name" id="np-name" placeholder="Nome premio">
+      <input class="f-pts" id="np-pts" type="number" min="1" max="9999" value="50" placeholder="Pt">
+      <button class="addbtn" onclick="addPrize()">Aggiungi</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PLAYERS = [
+  { name: 'Emanuele', av: 'av0', f: 'f0', dot: 'd0', ab: 'a0' },
+  { name: 'Stefano',  av: 'av1', f: 'f1', dot: 'd1', ab: 'a1' }
+];
+
+const DEFAULT_TASKS = [
+  {icon:'🍽️', name:'Sparecchiare', pts:5},
+  {icon:'🛏️', name:'Rifare il letto', pts:5},
+  {icon:'🧹', name:'Spazzare', pts:10},
+  {icon:'📚', name:'Studiare 30 min', pts:10},
+  {icon:'🐕', name:'Portare a spasso il cane', pts:10},
+  {icon:'🗑️', name:'Buttare la spazzatura', pts:5},
+  {icon:'👕', name:'Piegare i vestiti', pts:8},
+  {icon:'🚿', name:'Doccia senza protestare', pts:5},
+  {icon:'🌿', name:'Annaffiare le piante', pts:5},
+  {icon:'🧺', name:'Mettere il bucato', pts:8},
+  {icon:'🏊', name:'Pulire la piscina 30 min', pts:15},
+  {icon:'💩', name:'Raccogliere deiezioni animali', pts:10},
+  {icon:'🍳', name:'Caricare la lavastoviglie', pts:5},
+];
+
+const DEFAULT_PRIZES = [
+  {icon:'🍬', name:'Caramelle extra', pts:20},
+  {icon:'🎮', name:'+30 min console/computer', pts:40},
+  {icon:'🎬', name:'Scegli il film serale', pts:60},
+  {icon:'🍕', name:'Cena a scelta', pts:80},
+  {icon:'🎉', name:'Uscita speciale', pts:120},
+];
+
+function load() {
+  return {
+    tasks:  JSON.parse(localStorage.getItem('tp_tasks')  || 'null') || DEFAULT_TASKS,
+    prizes: JSON.parse(localStorage.getItem('tp_prizes') || 'null') || DEFAULT_PRIZES,
+    points: JSON.parse(localStorage.getItem('tp_points') || '[0,0]'),
+    logs:   JSON.parse(localStorage.getItem('tp_logs')   || '[]'),
+  };
+}
+
+function save() {
+  localStorage.setItem('tp_tasks',  JSON.stringify(state.tasks));
+  localStorage.setItem('tp_prizes', JSON.stringify(state.prizes));
+  localStorage.setItem('tp_points', JSON.stringify(state.points));
+  localStorage.setItem('tp_logs',   JSON.stringify(state.logs));
+}
+
+let state = load();
+
+function inits(n) { return n.split(' ').map(w=>w[0]).join('').toUpperCase(); }
+
+function renderPlayers() {
+  const sorted = state.prizes.slice().sort((a,b)=>a.pts-b.pts);
+  const maxPt = sorted.length ? sorted[sorted.length-1].pts : 100;
+  document.getElementById('player-grid').innerHTML = PLAYERS.map((p,i) => {
+    const pct = Math.min(100, Math.round((state.points[i] / maxPt) * 100));
+    const next = sorted.find(pr => pr.pts > state.points[i]);
+    const unlocked = state.prizes.filter(pr => pr.pts <= state.points[i]).length;
+    return `<div class="pcard">
+      <div class="pheader">
+        <div class="avatar ${p.av}">${inits(p.name)}</div>
+        <div><div class="pname">${p.name}</div><div class="ppts">${state.points[i]} pt · ${unlocked} premi</div></div>
+      </div>
+      <div class="pbar"><div class="pfill ${p.f}" style="width:${pct}%"></div></div>
+      <div class="pnext">${next ? `→ ${next.icon} ${next.name} (${next.pts} pt)` : '🏆 Tutti i premi!'}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTasksMain() {
+  document.getElementById('task-list-main').innerHTML = state.tasks.map((t,ti) => `
+    <div class="tcard">
+      <div class="tinfo">
+        <span class="tico">${t.icon}</span>
+        <span class="tname">${t.name}</span>
+        <span class="tbadge">+${t.pts} pt</span>
+      </div>
+      <div class="arow">
+        ${PLAYERS.map((p,pi) => `<button class="abtn ${p.ab}" onclick="addPts(${pi},${ti})">${p.name} +${t.pts}</button>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function renderPrizes() {
+  const sorted = state.prizes.slice().sort((a,b)=>a.pts-b.pts);
+  document.getElementById('prizes-list').innerHTML = sorted.length ? sorted.map(pr => {
+    const stars = '★'.repeat(Math.min(5, Math.ceil(pr.pts/24)));
+    const u0 = state.points[0] >= pr.pts, u1 = state.points[1] >= pr.pts;
+    let badge = '';
+    if (u0 && u1) badge = '<span class="unlocked-badge">✅ Entrambi</span>';
+    else if (u0) badge = `<span class="unlocked-badge">✅ ${PLAYERS[0].name}</span>`;
+    else if (u1) badge = `<span class="unlocked-badge">✅ ${PLAYERS[1].name}</span>`;
+    return `<div class="prow">
+      <span class="pico">${pr.icon}</span>
+      <div class="pinfo"><div class="prname">${pr.name}</div><div class="prth">${pr.pts} punti necessari</div>${badge}</div>
+      <div class="prstars">${stars}</div>
+    </div>`;
+  }).join('') : '<p class="empty">Nessun premio. Aggiungine uno!</p>';
+}
+
+function renderTasksEdit() {
+  document.getElementById('task-list-edit').innerHTML = state.tasks.map((t,ti) => `
+    <div class="edit-tcard">
+      <span class="tico">${t.icon}</span>
+      <span class="tname">${t.name} — <strong>+${t.pts} pt</strong></span>
+      <button class="delbtn" onclick="delTask(${ti})">🗑</button>
+    </div>`).join('') || '<p class="empty">Nessuna attività.</p>';
+}
+
+function renderPrizesEdit() {
+  const sorted = state.prizes.slice().sort((a,b)=>a.pts-b.pts);
+  document.getElementById('prizes-edit').innerHTML = sorted.length ? sorted.map(pr => {
+    const i = state.prizes.indexOf(pr);
+    return `<div class="edit-tcard">
+      <span class="tico">${pr.icon}</span>
+      <span class="tname">${pr.name} — <strong>${pr.pts} pt</strong></span>
+      <button class="delbtn" onclick="delPrize(${i})">🗑</button>
+    </div>`;
+  }).join('') : '<p class="empty">Nessun premio.</p>';
+}
+
+function renderLog() {
+  document.getElementById('log-list').innerHTML = state.logs.length
+    ? state.logs.slice().reverse().slice(0,20).map(l => `
+        <div class="litem">
+          <span class="dot ${PLAYERS[l.p].dot}"></span>
+          <span>${PLAYERS[l.p].name} — ${state.tasks[l.t] ? state.tasks[l.t].icon+' '+state.tasks[l.t].name : '(rimossa)'} +${l.pts} pt</span>
+        </div>`).join('')
+    : '<p class="empty" style="padding:8px 0">Nessuna azione ancora.</p>';
+}
+
+function addPts(pi, ti) {
+  const prev = state.points[pi];
+  state.points[pi] += state.tasks[ti].pts;
+  state.logs.push({ p: pi, t: ti, pts: state.tasks[ti].pts });
+  if (state.logs.length > 100) state.logs = state.logs.slice(-100);
+  const sorted = state.prizes.slice().sort((a,b)=>a.pts-b.pts);
+  const newPrize = sorted.find(pr => pr.pts > prev && pr.pts <= state.points[pi]);
+  save(); renderPlayers(); renderPrizes(); renderLog();
+  if (newPrize) showToast(`🎉 ${PLAYERS[pi].name} ha sbloccato: ${newPrize.icon} ${newPrize.name}!`);
+  else showToast(`+${state.tasks[ti].pts} pt a ${PLAYERS[pi].name}! (Tot: ${state.points[pi]})`);
+}
+
+function addTask() {
+  const icon = document.getElementById('nt-icon').value.trim() || '⭐';
+  const name = document.getElementById('nt-name').value.trim();
+  const pts  = parseInt(document.getElementById('nt-pts').value) || 5;
+  if (!name) { showToast('Inserisci il nome dell\'attività!'); return; }
+  state.tasks.push({ icon, name, pts });
+  document.getElementById('nt-name').value = '';
+  document.getElementById('nt-icon').value = '';
+  save(); renderTasksMain(); renderTasksEdit();
+  showToast(`Attività "${name}" aggiunta!`);
+}
+
+function delTask(i) {
+  const n = state.tasks[i].name;
+  state.tasks.splice(i, 1);
+  save(); renderTasksMain(); renderTasksEdit();
+  showToast(`"${n}" eliminata`);
+}
+
+function addPrize() {
+  const icon = document.getElementById('np-icon').value.trim() || '🎁';
+  const name = document.getElementById('np-name').value.trim();
+  const pts  = parseInt(document.getElementById('np-pts').value) || 50;
+  if (!name) { showToast('Inserisci il nome del premio!'); return; }
+  state.prizes.push({ icon, name, pts });
+  document.getElementById('np-name').value = '';
+  document.getElementById('np-icon').value = '';
+  save(); renderPrizes(); renderPrizesEdit(); renderPlayers();
+  showToast(`Premio "${name}" aggiunto!`);
+}
+
+function delPrize(i) {
+  const n = state.prizes[i].name;
+  state.prizes.splice(i, 1);
+  save(); renderPrizes(); renderPrizesEdit(); renderPlayers();
+  showToast(`"${n}" eliminato`);
+}
+
+function resetAll() {
+  if (confirm('Azzerare i punti di Emanuele e Stefano?')) {
+    state.points = [0, 0]; state.logs = [];
+    save(); renderPlayers(); renderPrizes(); renderLog();
+    showToast('Punti azzerati! Nuovo giro 🚀');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('sec-' + name).classList.add('active');
+  if (name === 'gestisci') { renderTasksEdit(); renderPrizesEdit(); }
+  if (name === 'premi') { renderPrizes(); }
+}
+
+renderPlayers(); renderTasksMain(); renderLog();
+</script>
+</body>
+</html>
